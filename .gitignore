@@ -1,1 +1,5 @@
+test_input/rendered_root
 virtenv
+
+*.pyc
+*.swp
