@@ -8,7 +8,7 @@ from verdandi.mixins.templatemixin import TemplateMixin
 from verdandi.mixins.menuitemmixin import MenuItemMixin
 from verdandi.constants import CONTENT_DIRECTORY
 
-class Page(TemplateMixin, MenuItemMixin):
+class Page(MenuItemMixin, TemplateMixin):
 
 	title = "Page Title"
 	content_file = "content.md"
