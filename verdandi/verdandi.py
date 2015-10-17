@@ -33,6 +33,11 @@ class Verdandi(object):
 			messages = messages + self.send_message(message)
 
 
+	def collect_assets(self): 
+		for module in self.modules:
+			module.collect_assets(self.output_directory)
+
+
 	def render(self):
 		if not os.path.exists(self.output_directory):
 			os.mkdir(self.output_directory)
@@ -42,4 +47,5 @@ class Verdandi(object):
 
 	def run(self):
 		self.pass_messages()
+		self.collect_assets()
 		self.render()
