@@ -3,4 +3,4 @@
 class RenderMixin(object):
 	
 	def render(self, output_directory, jinja_env):
-		return None
+		pass
