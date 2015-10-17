@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
+from verdandi.mixins.messagemixin import MessageMixin
 
-class MenuItemMixin(object):
+class MenuItemMixin(MessageMixin):
 
 	menu_title = "Menu title"
 	menu_label = None
@@ -10,28 +11,30 @@ class MenuItemMixin(object):
 	menu_items = None
 
 	def process_message(self, message):
+		other_messages = super(MenuItemMixin, self).process_message(message)
+		
 		if message == None:
-			return [{'type': 'menu_add_item', 
-						'title' : self.menu_title, 
-						'parent' : self.menu_parent,
-						'label' : self.menu_label,
-						'url' : self.url}]
-		elif message['type'] == 'menu_add_item':			
+			return other_messages + [{'type': 'menu_add_item', 
+										'title' : self.menu_title, 
+										'parent' : self.menu_parent,
+										'label' : self.menu_label,
+										'url' : self.url}]
 
+		elif message['type'] == 'menu_add_item':			
 			if self.menu_items == None:
 				self.menu_items = {}
 
 			label = message['label']
 			if label in self.menu_items.keys():
 				print '[Warn] Depulicate menu item label: %s in %s' % (label, self.menu_label)
-				return []
+				return other_messages
 			
 			self.menu_items[label] = {}
 			
 			for key in ['title', 'parent', 'label', 'url']:
 				self.menu_items[label][key] = message[key]
 
-		return []
+		return other_messages
 
 
 	def get_menu_path(self):
