@@ -5,15 +5,19 @@ sys.path.append('../')
 
 from verdandi.verdandi import Verdandi
 from verdandi.modules.page import Page
+from verdandi.modules.commonassets import CommonAssets
 
 class TestPage1(Page):
 	title = "A cool new Page"
 	menu_title = "New Page"
 	menu_label = "new_cool_page"
-	
+
 
 class TestPage2(Page):
 	title = "An other cool Page"
+	assets = [('img/foo.png', 'img/'),
+				('img/foo.png', 'img/bar.png'),
+				('img/foo.png', 'img/bar')]
 	url = "page2.html"
 	menu_title = "Other new Page"
 	menu_label = "cool_page1"
@@ -26,11 +30,15 @@ class TestPage3(Page):
 	menu_parent = "cool_page1"
 	url = "subdir/page3.html"
 
+class Assets(CommonAssets):
+	assets = [('img', 'img/dir'),
+				('img/', 'img/files')]
 
 class TestBlog(Verdandi):
 	modules = [TestPage1(),
 				TestPage2(),
-				TestPage3()]
+				TestPage3(),
+				Assets()]
 
 
 testblog = TestBlog()

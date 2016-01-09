@@ -6,9 +6,10 @@ import markdown
 
 from verdandi.mixins.templatemixin import TemplateMixin
 from verdandi.mixins.menuitemmixin import MenuItemMixin
+from verdandi.mixins.assetsmixin import AssetsMixin
 from verdandi.constants import CONTENT_DIRECTORY
 
-class Page(MenuItemMixin, TemplateMixin):
+class Page(MenuItemMixin, TemplateMixin, AssetsMixin):
 
 	title = "Page Title"
 	content_file = "content.md"
