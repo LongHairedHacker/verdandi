@@ -3,3 +3,5 @@
 OUTPUT_DIRECTORY = "rendered_root"
 TEMPLATE_DIRECTORY = "templates"
 CONTENT_DIRECTORY = "content"
+
+SERVE_PORT = 8000

@@ -1,9 +1,15 @@
 #!/usr/bin/env python2
 
 import os
-from jinja2 import Environment, FileSystemLoader
+import sys
+import SocketServer
 
-from constants import OUTPUT_DIRECTORY, TEMPLATE_DIRECTORY
+from jinja2 import Environment, FileSystemLoader
+from SimpleHTTPServer import SimpleHTTPRequestHandler
+
+
+
+from constants import OUTPUT_DIRECTORY, TEMPLATE_DIRECTORY, SERVE_PORT
 
 class Verdandi(object):
 
@@ -33,7 +39,7 @@ class Verdandi(object):
 			messages = messages + self.send_message(message)
 
 
-	def collect_assets(self): 
+	def collect_assets(self):
 		for module in self.modules:
 			module.collect_assets(self.output_directory)
 
@@ -49,3 +55,8 @@ class Verdandi(object):
 		self.pass_messages()
 		self.collect_assets()
 		self.render()
+
+		if len(sys.argv) > 1 and sys.argv[1] == 'serve':
+			os.chdir(self.output_directory)
+			httpd = SocketServer.TCPServer(("", SERVE_PORT), SimpleHTTPRequestHandler)
+			httpd.serve_forever()
