@@ -5,9 +5,11 @@
 	<body>
 		{{menu}}
 		<br/>
-		{{content}}
-		<br/>
-		Created: {{content_creation_time.strftime('%d.%m.%Y %H:%M:%S')}}</br>
-		Edit: {{content_edit_time.strftime('%d.%m.%Y %H:%M:%S')}}</br>
+		{% block content %}
+			{{content}}
+			<br/>
+			Created: {{content_creation_time.strftime('%d.%m.%Y %H:%M:%S')}}</br>
+			Edit: {{content_edit_time.strftime('%d.%m.%Y %H:%M:%S')}}</br>
+		{% endblock %}
 	</body>
 </html>

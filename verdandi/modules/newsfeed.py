@@ -1,0 +1,81 @@
+#!/usr/bin/env python2
+
+import os
+import markdown
+
+from datetime import datetime
+
+from verdandi.mixins.templatemixin import TemplateMixin
+from verdandi.mixins.menuitemmixin import MenuItemMixin
+from verdandi.mixins.assetsmixin import AssetsMixin
+from verdandi.constants import CONTENT_DIRECTORY, MARKDOWN_EXTENSIONS
+
+
+class NewsFeed(MenuItemMixin, TemplateMixin, AssetsMixin):
+
+	title = "News feed title"
+	template = "newsfeed.html"
+	feed_template = "newsfeed.rss"
+	feed_url = "feed.rss"
+	news_item_directory = "news"
+	news_feed_id = "news"
+
+	markdown_extensions = MARKDOWN_EXTENSIONS
+	content_directory = CONTENT_DIRECTORY
+
+	items = []
+
+
+	def process_message(self, message):
+		other_messages = super(NewsFeed, self).process_message(message)
+
+		if message != None and message['type'] == 'news_feed_item' and message['feed_id'] == news_feed_id:
+			self.items += message['item']
+
+		return other_messages
+
+
+	def get_context(self):
+		context = super(NewsFeed,self).get_context()
+		context['page_title'] = self.title
+		context['feed_url'] = self.feed_url
+
+		markdown_converter = markdown.Markdown(extensions = self.markdown_extensions)
+
+		rendered_items = []
+		for item in self.items:
+			item['content'] = markdown_converter.convert(item['content'])
+			rendered_items.append(item)
+
+		item_directory = os.path.join(self.content_directory, self.news_item_directory)
+		for news_file in os.listdir(item_directory):
+			_, ext = os.path.splitext(news_file)
+			if ext == '.md':
+				item = {}
+
+				full_path = os.path.join(item_directory, news_file)
+
+				ctime = os.path.getctime(full_path)
+				item['creation_time'] = datetime.fromtimestamp(ctime)
+
+				mtime = os.path.getmtime(full_path)
+				item['edit_time'] = datetime.fromtimestamp(mtime)
+
+				markdown_source = open(full_path, 'r').read()
+				item['content'] = markdown_converter.convert(markdown_source)
+
+				print item
+
+				rendered_items.append(item)
+
+		print rendered_items
+
+		rendered_items = sorted(rendered_items, key=lambda item: item['creation_time'], reverse=True)
+		context['items'] = rendered_items
+
+		return context
+
+
+	def render_files(self, context, output_directory, jinja_env):
+		self.render_to_file(self.feed_template, self.feed_url, context, output_directory, jinja_env)
+		super(NewsFeed, self).render_files(context, output_directory, jinja_env)
