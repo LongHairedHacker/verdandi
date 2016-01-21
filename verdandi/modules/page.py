@@ -7,7 +7,7 @@ import markdown
 from verdandi.mixins.templatemixin import TemplateMixin
 from verdandi.mixins.menuitemmixin import MenuItemMixin
 from verdandi.mixins.assetsmixin import AssetsMixin
-from verdandi.constants import CONTENT_DIRECTORY
+from verdandi.constants import CONTENT_DIRECTORY, MARKDOWN_EXTENSIONS
 
 class Page(MenuItemMixin, TemplateMixin, AssetsMixin):
 
@@ -15,8 +15,8 @@ class Page(MenuItemMixin, TemplateMixin, AssetsMixin):
 	content_file = "content.md"
 	content_directory = CONTENT_DIRECTORY
 
-	markdown_extensions = ['markdown.extensions.sane_lists',
-							'markdown.extensions.tables']
+	markdown_extensions = MARKDOWN_EXTENSIONS
+
 
 	def get_context(self):
 		context = super(Page,self).get_context()

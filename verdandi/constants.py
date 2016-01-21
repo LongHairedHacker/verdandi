@@ -3,5 +3,8 @@
 OUTPUT_DIRECTORY = "rendered_root"
 TEMPLATE_DIRECTORY = "templates"
 CONTENT_DIRECTORY = "content"
+MARKDOWN_EXTENSIONS = ['markdown.extensions.sane_lists',
+						'markdown.extensions.tables']
+
 
 SERVE_PORT = 8000
