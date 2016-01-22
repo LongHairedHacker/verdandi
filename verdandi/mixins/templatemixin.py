@@ -2,6 +2,8 @@
 
 import os
 
+from dateutil import parser
+
 class TemplateMixin(object):
 	template = "base.html"
 	url = "index.html"
@@ -30,3 +32,19 @@ class TemplateMixin(object):
 		out_file = open(out_path, "wb")
 		out_file.write(result)
 		out_file.close()
+
+
+	def read_content_file(self, path):
+		content_file = open(path, 'r')
+
+		result = {}
+
+		first_line = content_file.readline()
+		second_line = content_file.readline()
+
+		result['content'] = content_file.read()
+
+		result['creation_time'] = parser.parse(first_line)
+		result['edit_time'] = parser.parse(second_line)
+
+		return result

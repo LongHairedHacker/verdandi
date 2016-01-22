@@ -25,13 +25,12 @@ class Page(MenuItemMixin, TemplateMixin, AssetsMixin):
 		full_path = os.path.join(self.content_directory, self.content_file)
 		markdown_converter = markdown.Markdown(extensions = self.markdown_extensions)
 
-		ctime = os.path.getctime(full_path)
-		context['content_creation_time'] = datetime.fromtimestamp(ctime)
+		content = self.read_content_file(full_path)
 
-		mtime = os.path.getmtime(full_path)
-		context['content_edit_time'] = datetime.fromtimestamp(mtime)
+		context['content_creation_time'] = content['creation_time']
+		context['content_edit_time'] =  content['edit_time']
 
-		markdown_source = open(full_path, 'r').read()
+		markdown_source = content['content']
 		context['content'] = markdown_converter.convert(markdown_source)
 
 		return context

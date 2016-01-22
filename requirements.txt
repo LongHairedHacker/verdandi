@@ -1,3 +1,5 @@
 Jinja2==2.7.3
 Markdown==2.6
 MarkupSafe==0.23
+python-dateutil==2.4.2
+six==1.10.0

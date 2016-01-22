@@ -58,5 +58,5 @@ class Verdandi(object):
 
 		if len(sys.argv) > 1 and sys.argv[1] == 'serve':
 			os.chdir(self.output_directory)
-			httpd = SocketServer.TCPServer(("", SERVE_PORT), SimpleHTTPRequestHandler)
+			httpd = SocketServer.TCPServer(("0.0.0.0", SERVE_PORT), SimpleHTTPRequestHandler)
 			httpd.serve_forever()

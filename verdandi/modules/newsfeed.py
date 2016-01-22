@@ -55,14 +55,9 @@ class NewsFeed(MenuItemMixin, TemplateMixin, AssetsMixin):
 
 				full_path = os.path.join(item_directory, news_file)
 
-				ctime = os.path.getctime(full_path)
-				item['creation_time'] = datetime.fromtimestamp(ctime)
+				item = self.read_content_file(full_path)
 
-				mtime = os.path.getmtime(full_path)
-				item['edit_time'] = datetime.fromtimestamp(mtime)
-
-				markdown_source = open(full_path, 'r').read()
-				item['content'] = markdown_converter.convert(markdown_source)
+				item['content'] = markdown_converter.convert(item['content'])
 
 				print item
 
