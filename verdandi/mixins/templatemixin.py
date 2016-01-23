@@ -47,4 +47,6 @@ class TemplateMixin(object):
 		result['creation_time'] = parser.parse(first_line)
 		result['edit_time'] = parser.parse(second_line)
 
+		content_file.close()
+
 		return result

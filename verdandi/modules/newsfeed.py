@@ -3,7 +3,7 @@
 import os
 import markdown
 
-from datetime import datetime
+from dateutil import parser
 
 from verdandi.mixins.templatemixin import TemplateMixin
 from verdandi.mixins.menuitemmixin import MenuItemMixin
@@ -29,8 +29,9 @@ class NewsFeed(MenuItemMixin, TemplateMixin, AssetsMixin):
 	def process_message(self, message):
 		other_messages = super(NewsFeed, self).process_message(message)
 
-		if message != None and message['type'] == 'news_feed_item' and message['feed_id'] == news_feed_id:
-			self.items += message['item']
+		if message != None and message['type'] == 'news_feed_item':
+			if message['feed_id'] == self.news_feed_id:
+				self.items += [message['item']]
 
 		return other_messages
 
@@ -45,7 +46,8 @@ class NewsFeed(MenuItemMixin, TemplateMixin, AssetsMixin):
 		rendered_items = []
 		for item in self.items:
 			item['content'] = markdown_converter.convert(item['content'])
-			rendered_items.append(item)
+			item['url'] = self.url
+			rendered_items += [item]
 
 		item_directory = os.path.join(self.content_directory, self.news_item_directory)
 		for news_file in os.listdir(item_directory):
@@ -55,20 +57,42 @@ class NewsFeed(MenuItemMixin, TemplateMixin, AssetsMixin):
 
 				full_path = os.path.join(item_directory, news_file)
 
-				item = self.read_content_file(full_path)
+				item = self.read_news_item_file(full_path)
 
 				item['content'] = markdown_converter.convert(item['content'])
 
-				print item
-
-				rendered_items.append(item)
-
-		print rendered_items
+				rendered_items += [item]
 
 		rendered_items = sorted(rendered_items, key=lambda item: item['creation_time'], reverse=True)
 		context['items'] = rendered_items
 
+		print rendered_items
+
 		return context
+
+
+	def read_news_item_file(self, path):
+		item_file = open(path, 'r')
+
+		result = {}
+
+		first_line = item_file.readline()
+		second_line = item_file.readline()
+
+		third_line = item_file.readline().strip()
+		while third_line == '':
+			third_line = item_file.readline().strip()
+
+		result['title'] = third_line
+
+		result['content'] = item_file.read()
+
+		result['creation_time'] = parser.parse(first_line)
+		result['edit_time'] = parser.parse(second_line)
+
+		item_file.close()
+
+		return result
 
 
 	def render_files(self, context, output_directory, jinja_env):
