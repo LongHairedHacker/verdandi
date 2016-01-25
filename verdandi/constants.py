@@ -8,3 +8,4 @@ MARKDOWN_EXTENSIONS = ['markdown.extensions.sane_lists',
 
 
 SERVE_PORT = 8000
+SERVE_BIND_ADDRESS = "0.0.0.0"

@@ -66,8 +66,6 @@ class NewsFeed(MenuItemMixin, TemplateMixin, AssetsMixin):
 		rendered_items = sorted(rendered_items, key=lambda item: item['creation_time'], reverse=True)
 		context['items'] = rendered_items
 
-		print rendered_items
-
 		return context
 
 

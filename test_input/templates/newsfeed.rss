@@ -1,1 +1,13 @@
-{{items | pprint}}
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+	<channel>
+		{% for item in items %}
+			<item>
+				<title>{{item.title}}</title>
+				<url>{{item.url}}</url>
+				<description>{{item.content}}</description>
+				<pubDate>{{item.creation_time.strftime('%d.%m.%Y %H:%M:%S')}}</pubDate>
+			</item>
+		{% endfor %}
+	</channel>
+</rss>

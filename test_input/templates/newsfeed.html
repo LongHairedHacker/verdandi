@@ -2,7 +2,11 @@
 
 {% block content %}
 
-{{items | pprint}}
-
+{% for item in items %}
+	<div>
+		<h2>{{item.title}}</h2>
+		{{item.content}}
+	</div>
+{% endfor %}
 
 {% endblock %}

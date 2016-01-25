@@ -9,7 +9,7 @@ from SimpleHTTPServer import SimpleHTTPRequestHandler
 
 
 
-from constants import OUTPUT_DIRECTORY, TEMPLATE_DIRECTORY, SERVE_PORT
+from constants import OUTPUT_DIRECTORY, TEMPLATE_DIRECTORY, SERVE_PORT, SERVE_BIND_ADDRESS
 
 class Verdandi(object):
 
@@ -58,5 +58,6 @@ class Verdandi(object):
 
 		if len(sys.argv) > 1 and sys.argv[1] == 'serve':
 			os.chdir(self.output_directory)
-			httpd = SocketServer.TCPServer(("0.0.0.0", SERVE_PORT), SimpleHTTPRequestHandler)
+			httpd = SocketServer.TCPServer((SERVE_BIND_ADDRESS, SERVE_PORT), SimpleHTTPRequestHandler)
+			print "Serving under %s:%d" % (SERVE_BIND_ADDRESS, SERVE_PORT)
 			httpd.serve_forever()

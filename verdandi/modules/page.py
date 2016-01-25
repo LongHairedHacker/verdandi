@@ -35,6 +35,8 @@ class Page(MenuItemMixin, NewsItemMixin, TemplateMixin, AssetsMixin):
 		lines = self.content['content'].split('\n')
 		elipsized_content = '\n'.join(lines[0:self.news_item_len])
 
+		elipsized_content += '\n\n Read [more](%s) ...' % self.url
+
 		item = {
 			'title': self.title,
 			'content': elipsized_content,
