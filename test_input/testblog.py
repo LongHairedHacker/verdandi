@@ -7,6 +7,7 @@ from verdandi.verdandi import Verdandi
 from verdandi.modules.page import Page
 from verdandi.modules.commonassets import CommonAssets
 from verdandi.modules.newsfeed import NewsFeed
+from verdandi.modules.gallery import Gallery
 
 class TestPage1(Page):
 	title = "A cool new Page"
@@ -41,13 +42,20 @@ class News(NewsFeed):
 	menu_title = "News"
 	menu_label = "news"
 
+class TestGallery(Gallery):
+	title = "A Test Gallery"
+	url = "testgallery.html"
+	gallery_directory = "test_gallery"
+	gallery_images_url = "img/test_gallery"
+
 
 class TestBlog(Verdandi):
 	modules = [TestPage1(),
 				TestPage2(),
 				TestPage3(),
 				Assets(),
-				News()]
+				News(),
+				TestGallery()]
 
 
 testblog = TestBlog()

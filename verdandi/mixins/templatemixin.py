@@ -29,6 +29,8 @@ class TemplateMixin(object):
 		if not os.path.isdir(out_dir):
 			os.mkdir(out_dir)
 
+		print "Rendering %s" % out_path
+
 		out_file = open(out_path, "wb")
 		out_file.write(result)
 		out_file.close()
