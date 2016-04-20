@@ -14,6 +14,7 @@ class Page(MenuItemMixin, NewsItemMixin, TemplateMixin, AssetsMixin):
 
 	title = "Page Title"
 	content_file = "content.md"
+	content_is_markdown = True
 	content_directory = CONTENT_DIRECTORY
 
 	markdown_extensions = MARKDOWN_EXTENSIONS
@@ -52,12 +53,14 @@ class Page(MenuItemMixin, NewsItemMixin, TemplateMixin, AssetsMixin):
 		context = super(Page,self).get_context()
 		context['page_title'] = self.title
 
-		markdown_converter = markdown.Markdown(extensions = self.markdown_extensions)
-
 		context['content_creation_time'] = self.content['creation_time']
 		context['content_edit_time'] =  self.content['edit_time']
 
-		markdown_source = self.content['content']
-		context['content'] = markdown_converter.convert(markdown_source)
+		if self.content_is_markdown:
+			markdown_converter = markdown.Markdown(extensions = self.markdown_extensions)
+			markdown_source = self.content['content']
+			context['content'] = markdown_converter.convert(markdown_source)
+		else:
+			context['content'] = self.content['content']
 
 		return context
