@@ -83,7 +83,7 @@ class NewsFeed(MenuItemMixin, TemplateMixin, AssetsMixin):
 
 		result['title'] = third_line
 
-		result['content'] = item_file.read()
+		result['content'] = item_file.read().decode('utf-8')
 
 		result['creation_time'] = parser.parse(first_line)
 		result['edit_time'] = parser.parse(second_line)

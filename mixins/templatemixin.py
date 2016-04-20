@@ -32,7 +32,7 @@ class TemplateMixin(object):
 		print "Rendering %s" % out_path
 
 		out_file = open(out_path, "wb")
-		out_file.write(result)
+		out_file.write(result.encode('utf-8'))
 		out_file.close()
 
 
@@ -44,7 +44,7 @@ class TemplateMixin(object):
 		first_line = content_file.readline()
 		second_line = content_file.readline()
 
-		result['content'] = content_file.read()
+		result['content'] = content_file.read().decode('utf-8')
 
 		result['creation_time'] = parser.parse(first_line)
 		result['edit_time'] = parser.parse(second_line)
