@@ -29,7 +29,9 @@ class NewsFeed(MenuItemMixin, TemplateMixin, AssetsMixin):
 	def process_message(self, message):
 		other_messages = super(NewsFeed, self).process_message(message)
 
-		if message != None and message['type'] == 'news_feed_item':
+		if message == None:
+			self.items = []
+	 	elif message['type'] == 'news_feed_item':
 			if message['feed_id'] == self.news_feed_id:
 				self.items += [message['item']]
 
