@@ -1,6 +1,4 @@
 #!/usr/bin/env python2
-import os
-import shutil
 
 from verdandi.constants import CONTENT_DIRECTORY
 
