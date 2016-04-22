@@ -7,11 +7,11 @@ import markdown
 
 from verdandi.mixins.templatemixin import TemplateMixin
 from verdandi.mixins.menuitemmixin import MenuItemMixin
-from verdandi.mixins.assetsmixin import AssetsMixin
+from verdandi.mixins.fileassetsmixin import FileAssetsMixin
 from verdandi.mixins.newsitemmixin import NewsItemMixin
 from verdandi.constants import CONTENT_DIRECTORY, MARKDOWN_EXTENSIONS
 
-class Gallery(MenuItemMixin, NewsItemMixin, TemplateMixin, AssetsMixin):
+class Gallery(MenuItemMixin, NewsItemMixin, TemplateMixin, FileAssetsMixin):
     title = 'Gallery Title'
     gallery_description_file = 'description.md'
     gallery_directory = 'gallery'

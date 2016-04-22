@@ -7,11 +7,11 @@ from dateutil import parser
 
 from verdandi.mixins.templatemixin import TemplateMixin
 from verdandi.mixins.menuitemmixin import MenuItemMixin
-from verdandi.mixins.assetsmixin import AssetsMixin
+from verdandi.mixins.fileassetsmixin import AssetsMixin
 from verdandi.constants import CONTENT_DIRECTORY, MARKDOWN_EXTENSIONS
 
 
-class NewsFeed(MenuItemMixin, TemplateMixin, AssetsMixin):
+class NewsFeed(MenuItemMixin, TemplateMixin, FileAssetsMixin):
 
 	title = "News feed title"
 	template = "newsfeed.html"
