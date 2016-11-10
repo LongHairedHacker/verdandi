@@ -7,7 +7,7 @@ from dateutil import parser
 
 from verdandi.mixins.templatemixin import TemplateMixin
 from verdandi.mixins.menuitemmixin import MenuItemMixin
-from verdandi.mixins.fileassetsmixin import AssetsMixin
+from verdandi.mixins.fileassetsmixin import FileAssetsMixin
 from verdandi.constants import CONTENT_DIRECTORY, MARKDOWN_EXTENSIONS
 
 
