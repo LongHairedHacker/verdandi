@@ -18,6 +18,10 @@ class SassAssets(MessageMixin, RenderMixin, AssetsMixin):
 			source_path = os.path.join(self.asset_directory, source)
 			dest_path = os.path.join(output_directory, destination);
 
+			dest_dir = os.path.dirname(dest_path)
+			if not os.path.exists(dest_dir):
+				os.makedirs(dest_dir)
+
 			if os.path.isfile(source_path):
 				self.compile_file(source_path, dest_path)
 			else:
