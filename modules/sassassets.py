@@ -31,13 +31,19 @@ class SassAssets(MessageMixin, RenderMixin, AssetsMixin):
 	def compile_file(self, source_path, dest_path):
 		print "Compiling %s to %s" % (source_path, dest_path)
 
+		source_dir = os.path.dirname(source_path)
+		original_dir = os.getcwd()
+
 		sass_file = open(source_path, 'r')
 		css_file = open(dest_path, 'w')
 
+		os.chdir(source_dir)
+
 		sass_string = sass_file.read().decode('utf-8')
 		css_string = sass.compile_str(sass_string)
-
 		css_file.write(css_string.encode('utf-8'))
+
+		os.chdir(original_dir)
 
 		sass_file.close()
 		css_file.close()
