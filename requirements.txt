@@ -1,5 +1,4 @@
 argh==0.26.1
-inotify==0.2.4
 Jinja2==2.7.3
 Markdown==2.6
 MarkupSafe==0.23

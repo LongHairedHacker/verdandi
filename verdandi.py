@@ -3,13 +3,26 @@
 import os
 import sys
 import SocketServer
-import inotify.adapters
 
+from time import sleep
 from jinja2 import Environment, FileSystemLoader
 from SimpleHTTPServer import SimpleHTTPRequestHandler
 from multiprocessing import Process
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
 from constants import CONTENT_DIRECTORY, OUTPUT_DIRECTORY, TEMPLATE_DIRECTORY, SERVE_PORT, SERVE_BIND_ADDRESS
+
+
+class DirectoryObserver(FileSystemEventHandler):
+	def __init__(self, verdandi):
+		self._verdandi = verdandi
+
+	def on_any_event(self, event):
+		print "File changed: %s" % event.src_path
+		self._verdandi.generate_output()
+
+
 
 class Verdandi(object):
 
@@ -64,23 +77,6 @@ class Verdandi(object):
 
 
 	def serve(self):
-
-		def has_create_or_modify(watch):
-			result = False
-			for event in watch.event_gen():
-				if event == None:
-					break
-
-				result = result or ('IN_CREATE' in event[1])
-				result = result or ('IN_DELETE' in event[1])
-				result = result or ('IN_MODIFY' in event[1])
-
-			return result
-
-		content_watch = inotify.adapters.InotifyTree(CONTENT_DIRECTORY)
-		template_watch = inotify.adapters.InotifyTree(TEMPLATE_DIRECTORY)
-
-
 		def serve():
 			os.chdir(self.output_directory)
 			httpd = SocketServer.TCPServer((SERVE_BIND_ADDRESS, SERVE_PORT), SimpleHTTPRequestHandler)
@@ -88,9 +84,21 @@ class Verdandi(object):
 			httpd.serve_forever()
 
 
+		event_handler = DirectoryObserver(self)
+		observer = Observer()
+		observer.schedule(event_handler, CONTENT_DIRECTORY, recursive=True)
+		observer.schedule(event_handler, TEMPLATE_DIRECTORY, recursive=True)
+		observer.start()
+
 		server_process = Process(target=serve)
 		server_process.start()
 
-		while True:
-			if has_create_or_modify(content_watch) or has_create_or_modify(template_watch):
-				self.generate_output()
+		try:
+			server_process.join()
+		except KeyboardInterrupt:
+			pass
+
+		observer.stop()
+		observer.join()
+
+		print "Be vigilant!"
