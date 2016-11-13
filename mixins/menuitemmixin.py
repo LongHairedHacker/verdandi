@@ -22,7 +22,7 @@ class MenuItemMixin(MessageMixin):
 										'url' : self.url}]
 
 		elif message['type'] == 'menu_add_item':
-			
+
 			label = message['label']
 			if label in self.menu_items.keys():
 				print '[Warn] Depulicate menu item label: %s in %s' % (label, self.menu_label)
@@ -36,48 +36,30 @@ class MenuItemMixin(MessageMixin):
 		return other_messages
 
 
-	def get_menu_path(self):
-		path = [self.menu_label]
-		while self.menu_items[path[0]]['parent'] != None:
-			path = [self.menu_items[path[0]]['parent']] + path
-
-		return path
-
-
 	def get_menu_level(self, parent):
-		return filter(lambda x: x['parent'] == parent, self.menu_items.values())
+		level = filter(lambda x: x['parent'] == parent, self.menu_items.values())
+		return sorted(level, key=lambda x: x['label'])
 
 
-	def generate_levels(self, path):
-		level = path[0]
-		next_level = None
-		if len(path) > 1:
-			next_level = path[1]
+	def generate_levels(self, parent):
+		level = self.get_menu_level(parent)
 
-		res = '<ul>'
+		if len(level) == 0:
+			return ''
 
-		sorted_level = sorted(self.get_menu_level(level), key=lambda x: x['label'])
-		for item in sorted_level:
-			if item['label'] == self.menu_label:
-				res += '<li><b>%s</b><br>' % item['title']
-				res += self.generate_levels(path[1:])
-				res += '</li>'
-			elif item['label'] == next_level:
-				res += '<li><i><a href="/%s">%s</a></i><br/>' % (item['url'], item['title'])
-				res += self.generate_levels(path[1:])
-				res += '</li>'
-			else:
-				res += '<li><a href="/%s">%s</a></li>' % (item['url'], item['title'])
+		res = '<ul>\n'
+		for item in level:
+			res += '<li><a href="/%s">%s</a>\n' % (item['url'], item['title'])
+			res += self.generate_levels(item['label'])
+			res += '</li>\n'
 
-		res += '</ul>'
+		res += '</ul>\n'
 
 		return res
 
+
 	def generate_menu(self):
-
-		path = self.get_menu_path()
-
-		return self.generate_levels([None] + path)
+		return self.generate_levels(None)
 
 
 	def get_context(self):
