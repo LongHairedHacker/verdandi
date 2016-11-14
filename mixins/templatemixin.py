@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 
 import os
+import codecs
 
 from dateutil import parser
 
@@ -31,13 +32,13 @@ class TemplateMixin(object):
 
 		print "Rendering %s" % out_path
 
-		out_file = open(out_path, "wb")
-		out_file.write(result.encode('utf-8'))
+		out_file = codecs.open(out_path, 'wb', 'utf-8')
+		out_file.write(result)
 		out_file.close()
 
 
 	def read_content_file(self, path):
-		content_file = open(path, 'r')
+		content_file = codecs.open(path, 'r', 'utf-8')
 
 		result = {}
 

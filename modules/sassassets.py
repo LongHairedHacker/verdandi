@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 
 import os
+import codecs
 from pylibsass import sass
 
 from verdandi.mixins.messagemixin import MessageMixin
@@ -34,14 +35,14 @@ class SassAssets(MessageMixin, RenderMixin, AssetsMixin):
 		source_dir = os.path.dirname(source_path)
 		original_dir = os.getcwd()
 
-		sass_file = open(source_path, 'r')
-		css_file = open(dest_path, 'w')
+		sass_file = codecs.open(source_path, 'r', 'utf-8')
+		css_file = codecs.open(dest_path, 'w', 'utf-8')
 
 		os.chdir(source_dir)
 
-		sass_string = sass_file.read().decode('utf-8')
+		sass_string = sass_file.read()
 		css_string = sass.compile_str(sass_string)
-		css_file.write(css_string.encode('utf-8'))
+		css_file.write(css_string)
 
 		os.chdir(original_dir)
 
