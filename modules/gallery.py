@@ -12,7 +12,6 @@ from verdandi.mixins.newsitemmixin import NewsItemMixin
 from verdandi.constants import CONTENT_DIRECTORY, MARKDOWN_EXTENSIONS
 
 class Gallery(MenuItemMixin, NewsItemMixin, TemplateMixin, FileAssetsMixin):
-    title = 'Gallery Title'
     gallery_description_file = 'description.md'
     gallery_directory = 'gallery'
     gallery_images_url = 'img/gallery'
@@ -64,7 +63,7 @@ class Gallery(MenuItemMixin, NewsItemMixin, TemplateMixin, FileAssetsMixin):
         elipsized_description += '\n\n View the [images](%s) ...' % self.url
 
         item = {
-            'title': self.title,
+            'title': self.description['title'],
             'content': elipsized_description,
             'creation_time': self.description['creation_time'],
             'edit_time': self.description['edit_time'],
@@ -76,7 +75,7 @@ class Gallery(MenuItemMixin, NewsItemMixin, TemplateMixin, FileAssetsMixin):
 
     def get_context(self):
         context = super(Gallery,self).get_context()
-        context['page_title'] = self.title
+        context['title'] = self.title
 
         markdown_converter = markdown.Markdown(extensions = self.markdown_extensions)
 

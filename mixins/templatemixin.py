@@ -44,11 +44,18 @@ class TemplateMixin(object):
 		first_line = content_file.readline()
 		second_line = content_file.readline()
 
+		third_line = content_file.readline().strip()
+		while third_line == '':
+			third_line = content_file.readline().strip()
+
+		result['title'] = third_line
+
 		result['content'] = content_file.read().decode('utf-8')
 
 		result['creation_time'] = parser.parse(first_line)
 		result['edit_time'] = parser.parse(second_line)
 
 		content_file.close()
+
 
 		return result

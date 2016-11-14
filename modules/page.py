@@ -12,7 +12,6 @@ from verdandi.constants import CONTENT_DIRECTORY, MARKDOWN_EXTENSIONS
 
 class Page(MenuItemMixin, NewsItemMixin, TemplateMixin, FileAssetsMixin):
 
-	title = "Page Title"
 	content_file = "content.md"
 	content_is_markdown = True
 	content_directory = CONTENT_DIRECTORY
@@ -39,7 +38,7 @@ class Page(MenuItemMixin, NewsItemMixin, TemplateMixin, FileAssetsMixin):
 		elipsized_content += '\n\n Read [more](%s) ...' % self.url
 
 		item = {
-			'title': self.title,
+			'title': self.content['title'],
 			'content': elipsized_content,
 			'creation_time': self.content['creation_time'],
 			'edit_time': self.content['edit_time'],
@@ -51,7 +50,7 @@ class Page(MenuItemMixin, NewsItemMixin, TemplateMixin, FileAssetsMixin):
 
 	def get_context(self):
 		context = super(Page,self).get_context()
-		context['page_title'] = self.title
+		context['title'] = self.content['title']
 
 		context['content_creation_time'] = self.content['creation_time']
 		context['content_edit_time'] =  self.content['edit_time']

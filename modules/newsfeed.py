@@ -40,7 +40,7 @@ class NewsFeed(MenuItemMixin, TemplateMixin, FileAssetsMixin):
 
 	def get_context(self):
 		context = super(NewsFeed,self).get_context()
-		context['page_title'] = self.title
+		context['title'] = self.title
 		context['feed_url'] = self.feed_url
 
 		markdown_converter = markdown.Markdown(extensions = self.markdown_extensions)
@@ -59,7 +59,7 @@ class NewsFeed(MenuItemMixin, TemplateMixin, FileAssetsMixin):
 
 				full_path = os.path.join(item_directory, news_file)
 
-				item = self.read_news_item_file(full_path)
+				item = self.read_content_file(full_path)
 
 				item['content'] = markdown_converter.convert(item['content'])
 
@@ -69,30 +69,6 @@ class NewsFeed(MenuItemMixin, TemplateMixin, FileAssetsMixin):
 		context['items'] = rendered_items
 
 		return context
-
-
-	def read_news_item_file(self, path):
-		item_file = open(path, 'r')
-
-		result = {}
-
-		first_line = item_file.readline()
-		second_line = item_file.readline()
-
-		third_line = item_file.readline().strip()
-		while third_line == '':
-			third_line = item_file.readline().strip()
-
-		result['title'] = third_line
-
-		result['content'] = item_file.read().decode('utf-8')
-
-		result['creation_time'] = parser.parse(first_line)
-		result['edit_time'] = parser.parse(second_line)
-
-		item_file.close()
-
-		return result
 
 
 	def render_files(self, context, output_directory, jinja_env):
