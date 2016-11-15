@@ -41,7 +41,7 @@ class NewsFeed(MenuItemMixin, TemplateMixin, FileAssetsMixin):
 	def get_context(self):
 		context = super(NewsFeed,self).get_context()
 		context['title'] = self.title
-		context['feed_url'] = self.feed_url
+		context['feed_url'] = "/%s" % self.feed_url
 
 		markdown_converter = markdown.Markdown(extensions = self.markdown_extensions)
 
