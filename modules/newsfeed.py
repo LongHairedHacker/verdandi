@@ -48,12 +48,11 @@ class NewsFeed(MenuItemMixin, TemplateMixin, FileAssetsMixin):
 		rendered_items = []
 		for item in self.items:
 			item['content'] = markdown_converter.convert(item['content'])
-			item['url'] = self.url
 			rendered_items += [item]
 
 		item_directory = os.path.join(self.content_directory, self.news_item_directory)
 		for news_file in os.listdir(item_directory):
-			_, ext = os.path.splitext(news_file)
+			filename, ext = os.path.splitext(news_file)
 			if ext == '.md':
 				item = {}
 
@@ -62,6 +61,8 @@ class NewsFeed(MenuItemMixin, TemplateMixin, FileAssetsMixin):
 				item = self.read_content_file(full_path)
 
 				item['content'] = markdown_converter.convert(item['content'])
+				item['anchor'] = filename
+				item['url'] = "%s#%s" % (self.url, filename)
 
 				rendered_items += [item]
 

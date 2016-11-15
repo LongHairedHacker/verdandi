@@ -60,8 +60,6 @@ class Gallery(MenuItemMixin, NewsItemMixin, TemplateMixin, FileAssetsMixin):
         lines = self.description['content'].split('\n')
         elipsized_description = '\n'.join(lines[0:self.news_item_len])
 
-        elipsized_description += '\n\n View the [images](%s) ...' % self.url
-
         item = {
             'title': self.description['title'],
             'content': elipsized_description,

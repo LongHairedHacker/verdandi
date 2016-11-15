@@ -8,7 +8,7 @@ class NewsItemMixin(MessageMixin):
 	news_item_edit_time = None
 	news_item_url = '/index.html'
 
-	news_feed_id = 'news'
+	news_feed_id = None
 
 
 	def get_news_item(self):
@@ -26,7 +26,7 @@ class NewsItemMixin(MessageMixin):
 	def process_message(self, message):
 		other_messages = super(NewsItemMixin, self).process_message(message)
 
-		if message == None:
+		if message == None and self.news_feed_id != None:
 			other_messages += [{
 				'type' : 'news_feed_item',
 				'feed_id' : self.news_feed_id,
