@@ -2,6 +2,7 @@
 
 import os
 import codecs
+import copy
 
 from dateutil import parser
 
@@ -11,7 +12,7 @@ class TemplateMixin(object):
 	context = {}
 
 	def get_context(self):
-		return self.context
+		return copy.copy(self.context)
 
 	def render(self, output_directory, jinja_env):
 		context = self.get_context()
