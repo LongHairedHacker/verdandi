@@ -74,6 +74,7 @@ class Gallery(MenuItemMixin, NewsItemMixin, TemplateMixin, FileAssetsMixin):
     def get_context(self):
         context = super(Gallery,self).get_context()
         context['title'] = self.description['title']
+        context['url'] = "/%s" % self.url
 
         markdown_converter = markdown.Markdown(extensions = self.markdown_extensions)
 

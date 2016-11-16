@@ -28,10 +28,12 @@ class Verdandi(object):
 
 	output_directory = OUTPUT_DIRECTORY
 	modules = []
+	base_url = ""
 
 
 	def __init__(self):
 		self.jinja_env = Environment(loader=FileSystemLoader(TEMPLATE_DIRECTORY))
+		self.jinja_env.globals['base_url'] = self.base_url
 
 
 	def send_message(self, message):

@@ -49,6 +49,7 @@ class Page(MenuItemMixin, NewsItemMixin, TemplateMixin, FileAssetsMixin):
 	def get_context(self):
 		context = super(Page,self).get_context()
 		context['title'] = self.content['title']
+		context['url'] = "/%s" % self.url
 
 		context['content_creation_time'] = self.content['creation_time']
 		context['content_edit_time'] =  self.content['edit_time']
