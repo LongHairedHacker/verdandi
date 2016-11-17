@@ -3,6 +3,7 @@
 import os
 import sys
 import SocketServer
+import traceback
 
 from time import sleep
 from jinja2 import Environment, FileSystemLoader
@@ -20,7 +21,7 @@ class DirectoryObserver(FileSystemEventHandler):
 
 	def on_any_event(self, event):
 		print "File changed: %s" % event.src_path
-		self._verdandi.generate_output()
+		self._verdandi.generate_output(False)
 
 
 
@@ -68,16 +69,25 @@ class Verdandi(object):
 
 
 	def run(self):
-		self.generate_output()
-
 		if len(sys.argv) > 1 and sys.argv[1] == 'serve':
+			self.generate_output(False)
 			self.serve()
+		else:
+			self.generate_output()
+			sys.exit(0)
 
 
-	def generate_output(self):
-		self.pass_messages()
-		self.collect_assets()
-		self.render()
+	def generate_output(self, fail_on_exception = True):
+		try:
+			self.pass_messages()
+			self.collect_assets()
+			self.render()
+		except Exception:
+			print "[Error] I have a bad feeling about this ..."
+			traceback.print_exc()
+			if fail_on_exception:
+				sys.exit(1)
+
 
 
 	def serve(self):
@@ -106,3 +116,4 @@ class Verdandi(object):
 		observer.join()
 
 		print "Be vigilant!"
+		sys.exit(0)
