@@ -2,7 +2,7 @@
 
 import os
 import codecs
-from pylibsass import sass
+import sass
 
 from verdandi.mixins.messagemixin import MessageMixin
 from verdandi.mixins.rendermixin import RenderMixin
@@ -41,7 +41,7 @@ class SassAssets(MessageMixin, RenderMixin, AssetsMixin):
 		os.chdir(source_dir)
 
 		sass_string = sass_file.read()
-		css_string = sass.compile_str(sass_string)
+		css_string = sass.compile(string=sass_string)
 		css_file.write(css_string)
 
 		os.chdir(original_dir)
