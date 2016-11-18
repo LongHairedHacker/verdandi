@@ -15,6 +15,13 @@ from watchdog.events import FileSystemEventHandler
 from constants import CONTENT_DIRECTORY, OUTPUT_DIRECTORY, TEMPLATE_DIRECTORY, SERVE_PORT, SERVE_BIND_ADDRESS
 
 
+def serve(output_directory):
+	os.chdir(output_directory)
+	httpd = SocketServer.TCPServer((SERVE_BIND_ADDRESS, SERVE_PORT), SimpleHTTPRequestHandler)
+	print "Serving under %s:%d" % (SERVE_BIND_ADDRESS, SERVE_PORT)
+	httpd.serve_forever()
+
+
 class DirectoryObserver(FileSystemEventHandler):
 	def __init__(self, verdandi):
 		self._verdandi = verdandi
@@ -93,20 +100,13 @@ class Verdandi(object):
 
 
 	def serve(self):
-		def serve():
-			os.chdir(self.output_directory)
-			httpd = SocketServer.TCPServer((SERVE_BIND_ADDRESS, SERVE_PORT), SimpleHTTPRequestHandler)
-			print "Serving under %s:%d" % (SERVE_BIND_ADDRESS, SERVE_PORT)
-			httpd.serve_forever()
-
-
 		event_handler = DirectoryObserver(self)
 		observer = Observer()
 		observer.schedule(event_handler, CONTENT_DIRECTORY, recursive=True)
 		observer.schedule(event_handler, TEMPLATE_DIRECTORY, recursive=True)
 		observer.start()
 
-		server_process = Process(target=serve)
+		server_process = Process(target=serve, args=(self.output_directory,))
 		server_process.start()
 
 		try:
