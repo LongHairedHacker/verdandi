@@ -30,7 +30,7 @@ class TemplateMixin(object):
 		out_path = os.path.join(output_directory, url)
 		out_dir = os.path.dirname(out_path)
 		if not os.path.isdir(out_dir):
-			os.mkdir(out_dir)
+			os.makedirs(out_dir)
 
 		print "Rendering %s" % out_path
 

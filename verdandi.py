@@ -72,7 +72,7 @@ class Verdandi(object):
 
 	def render(self):
 		if not os.path.exists(self.output_directory):
-			os.mkdir(self.output_directory)
+			os.makedirs(self.output_directory)
 		for module in self.modules:
 			module.render(self.output_directory, self.jinja_env)
 
