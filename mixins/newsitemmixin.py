@@ -13,7 +13,7 @@ class NewsItemMixin(MessageMixin):
 
 	def get_news_item(self):
 		item = {
-			'title': self.news_item_titlenews_item_title,
+			'title': self.news_item_title,
 			'content': self.news_item_content,
 			'url' : self.news_item_url,
 			'creation_time': self.news_item_creation_time,

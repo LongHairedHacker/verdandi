@@ -47,8 +47,8 @@ class TemplateMixin(object):
 		result = {}
 		try:
 			result['title'] = meta['title']
-			result['creation_time'] = parser.parse(meta['creation_time'].decode('ascii'))
-			result['edit_time'] = parser.parse(meta['edit_time'].decode('ascii'))
+			result['creation_time'] = parser.parse(meta['creation_time'].decode('ascii'), dayfirst=True)
+			result['edit_time'] = parser.parse(meta['edit_time'].decode('ascii'), dayfirst=True)
 
 			result['content'] = content_file.read()
 		except KeyError as error:
