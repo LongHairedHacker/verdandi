@@ -8,9 +8,10 @@ from verdandi.mixins.templatemixin import TemplateMixin
 from verdandi.mixins.menuitemmixin import MenuItemMixin
 from verdandi.mixins.fileassetsmixin import FileAssetsMixin
 from verdandi.mixins.newsitemmixin import NewsItemMixin
+from verdandi.mixins.metadatamixin import MetadataMixin
 from verdandi.constants import CONTENT_DIRECTORY, MARKDOWN_EXTENSIONS
 
-class Page(MenuItemMixin, NewsItemMixin, TemplateMixin, FileAssetsMixin):
+class Page(MenuItemMixin, NewsItemMixin, MetadataMixin, TemplateMixin, FileAssetsMixin):
 
 	content_file = "content.md"
 	content_is_markdown = True
@@ -19,6 +20,7 @@ class Page(MenuItemMixin, NewsItemMixin, TemplateMixin, FileAssetsMixin):
 	markdown_extensions = MARKDOWN_EXTENSIONS
 
 	news_item_len = 10
+	metadata_description_len = 10
 
 
 	def process_message(self, message):
@@ -45,6 +47,24 @@ class Page(MenuItemMixin, NewsItemMixin, TemplateMixin, FileAssetsMixin):
 
 		return item
 
+	def get_metadata(self):
+		markdown_converter = markdown.Markdown(extensions = self.markdown_extensions)
+
+		metadata = super(Page, self).get_metadata()
+		lines = self.content['content'].split('\n')
+		elipsized_content = '\n'.join(lines[0:self.news_item_len])
+		elipsized_content = markdown_converter.convert(elipsized_content)
+
+		meta = {
+			'url': "/%s" % self.url,
+			'title': self.content['title'],
+			'description' : elipsized_content
+		}
+
+		if 'image' in metadata:
+			meta['image'] = "/%s" % metadata['image']
+
+		return meta
 
 	def get_context(self):
 		context = super(Page,self).get_context()

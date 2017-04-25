@@ -9,9 +9,10 @@ from verdandi.mixins.templatemixin import TemplateMixin
 from verdandi.mixins.menuitemmixin import MenuItemMixin
 from verdandi.mixins.fileassetsmixin import FileAssetsMixin
 from verdandi.mixins.newsitemmixin import NewsItemMixin
+from verdandi.mixins.metadatamixin import MetadataMixin
 from verdandi.constants import CONTENT_DIRECTORY, MARKDOWN_EXTENSIONS
 
-class Gallery(MenuItemMixin, NewsItemMixin, TemplateMixin, FileAssetsMixin):
+class Gallery(MenuItemMixin, NewsItemMixin, MetadataMixin, TemplateMixin, FileAssetsMixin):
     gallery_description_file = 'description.md'
     gallery_directory = 'gallery'
     gallery_images_url = 'img/gallery'
@@ -25,6 +26,8 @@ class Gallery(MenuItemMixin, NewsItemMixin, TemplateMixin, FileAssetsMixin):
     news_item_len = 10
 
     template = "gallery.html"
+
+    metadata_description_len = 10
 
     content_directory = CONTENT_DIRECTORY
     markdown_extensions = MARKDOWN_EXTENSIONS
@@ -69,6 +72,26 @@ class Gallery(MenuItemMixin, NewsItemMixin, TemplateMixin, FileAssetsMixin):
         }
 
         return item
+
+    def get_metadata(self):
+        markdown_converter = markdown.Markdown(extensions = self.markdown_extensions)
+
+        metadata = super(Gallery, self).get_metadata()
+        lines = self.description['content'].split('\n')
+        elipsized_description = '\n'.join(lines[0:self.news_item_len])
+        elipsized_description = markdown_converter.convert(elipsized_description)
+
+
+        meta = {
+        	'url': "/%s" % self.url,
+        	'title': self.description['title'],
+        	'description' : elipsized_description
+        }
+
+        if 'image' in metadata:
+        	meta['image'] = "/%s" % metadata['image']
+
+        return meta
 
 
     def get_context(self):

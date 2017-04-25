@@ -8,10 +8,11 @@ from dateutil import parser
 from verdandi.mixins.templatemixin import TemplateMixin
 from verdandi.mixins.menuitemmixin import MenuItemMixin
 from verdandi.mixins.fileassetsmixin import FileAssetsMixin
+from verdandi.mixins.metadatamixin import MetadataMixin
 from verdandi.constants import CONTENT_DIRECTORY, MARKDOWN_EXTENSIONS
 
 
-class NewsFeed(MenuItemMixin, TemplateMixin, FileAssetsMixin):
+class NewsFeed(MenuItemMixin, MetadataMixin, TemplateMixin, FileAssetsMixin):
 
 	title = "News feed title"
 	template = "newsfeed.html"
@@ -25,7 +26,6 @@ class NewsFeed(MenuItemMixin, TemplateMixin, FileAssetsMixin):
 
 	items = []
 
-
 	def process_message(self, message):
 		other_messages = super(NewsFeed, self).process_message(message)
 
@@ -36,6 +36,23 @@ class NewsFeed(MenuItemMixin, TemplateMixin, FileAssetsMixin):
 				self.items += [message['item']]
 
 		return other_messages
+
+
+	def get_metadata(self):
+		metadata = super(NewsFeed, self).get_metadata()
+
+		meta = {
+			'url': "/%s" % self.url,
+			'title': self.title
+		}
+
+		if 'description' in metadata:
+			meta['description'] = metadata['description']
+
+		if 'image' in metadata:
+			meta['image'] = "/%s" % metadata['image']
+
+		return meta
 
 
 	def get_context(self):
